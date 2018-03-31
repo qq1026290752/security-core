@@ -1,0 +1,37 @@
+{
+  "hints": [],
+  "groups": [
+    {
+      "sourceType": "cn.yichao.security.core.properties.SecurityPeoperties",
+      "name": "yichao.security",
+      "type": "cn.yichao.security.core.properties.SecurityPeoperties"
+    }
+  ],
+  "properties": [
+    {
+      "sourceType": "cn.yichao.security.core.properties.SecurityPeoperties",
+      "name": "yichao.security.browser",
+      "type": "cn.yichao.security.core.properties.BrowserProperties"
+    },
+    {
+      "sourceType": "cn.yichao.security.core.properties.SecurityPeoperties",
+      "name": "yichao.security.image",
+      "type": "cn.yichao.security.core.properties.ValidataProperties"
+    },
+    {
+      "sourceType": "cn.yichao.security.core.properties.SecurityPeoperties",
+      "name": "yichao.security.session",
+      "type": "cn.yichao.security.core.properties.SessionProperties"
+    },
+    {
+      "sourceType": "cn.yichao.security.core.properties.SecurityPeoperties",
+      "name": "yichao.security.sms",
+      "type": "cn.yichao.security.core.properties.SmsValidateProperties"
+    },
+    {
+      "sourceType": "cn.yichao.security.core.properties.SecurityPeoperties",
+      "name": "yichao.security.social",
+      "type": "cn.yichao.security.core.properties.SocialProperties"
+    }
+  ]
+}
