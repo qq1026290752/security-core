@@ -1,4 +1,4 @@
-package cn.yichao.security.core.authentication.mobile;
+package cn.yichao.security.core.vlidate.core.sms;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -13,10 +13,7 @@ import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.util.AntPathMatcher;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.social.connect.web.HttpSessionSessionStrategy;
-import org.springframework.social.connect.web.SessionStrategy;
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -25,19 +22,24 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import cn.yichao.security.core.constant.ProjectConstant;
 import cn.yichao.security.core.properties.SecurityPeoperties; 
 import cn.yichao.security.core.vlidate.ValidateCode;
+import cn.yichao.security.core.vlidate.ValidateCodeRepository;
 import cn.yichao.security.core.vlidate.core.ValidataCodeException;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
+
+
 @Slf4j
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class SmsValidateCodeFiler extends OncePerRequestFilter implements InitializingBean {
-	
-	
+public class SmsValidateCodeFiler extends OncePerRequestFilter implements InitializingBean {	
 
-	private SessionStrategy sessionStrategy = new HttpSessionSessionStrategy();
-	 
+	private ValidateCodeRepository validateCodeRepository;
+
+	public SmsValidateCodeFiler(ValidateCodeRepository validateCodeRepository) {
+		this.validateCodeRepository = validateCodeRepository;
+	}
+	
 	private AuthenticationFailureHandler yichaoAuthenticationFailuHandler;
 	//存放所有验证码路径
 	private Set<String> urls = new HashSet<>();
@@ -85,8 +87,8 @@ public class SmsValidateCodeFiler extends OncePerRequestFilter implements Initia
 	}
 
 	private void validata(ServletWebRequest request) throws ServletRequestBindingException {
-		   ValidateCode code = (ValidateCode) sessionStrategy.
-	                getAttribute(request, ProjectConstant.SMS_SESSION_KEY);
+		   ValidateCode code = (ValidateCode) validateCodeRepository.
+	                get(request, ProjectConstant.SMS_SESSION_KEY);
 	        String imageCode = ServletRequestUtils.getStringParameter(request.getRequest(), "sms_code");
 	        if(StringUtils.isBlank(imageCode)){
 	            throw  new ValidataCodeException("验证码不能为空");
@@ -95,13 +97,13 @@ public class SmsValidateCodeFiler extends OncePerRequestFilter implements Initia
 	            throw new ValidataCodeException("验证码不存在");
 	        }
 	        if(code.isExpried()){
-	            sessionStrategy.removeAttribute(request,ProjectConstant.SMS_SESSION_KEY);
+	        	validateCodeRepository.remove(request,ProjectConstant.SMS_SESSION_KEY);
 	            throw new ValidataCodeException("当前验证码已过期");
 	        }
 	        if(!StringUtils.equals(imageCode,code.getCode())){
 	            throw new ValidataCodeException("验证码输入错误");
 	        }
-	        sessionStrategy.removeAttribute(request,ProjectConstant.SMS_SESSION_KEY);
+	        validateCodeRepository.remove(request,ProjectConstant.SMS_SESSION_KEY);
 	}
 
 }

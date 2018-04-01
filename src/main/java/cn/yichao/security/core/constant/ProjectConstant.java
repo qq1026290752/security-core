@@ -19,5 +19,7 @@ public interface ProjectConstant {
 	String CONTENTTYPE_HTML = "text/html;charset=UTF-8";
 	//返回JSON信息
 	String CONTENTTYPE_JSON = "application/json;charset=UTF-8";
+	//appSocial注册地址
+	String SOCIAL_SIGNUP_URI = "/social/signUp";
 }
 

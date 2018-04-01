@@ -5,9 +5,7 @@ import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.social.connect.web.HttpSessionSessionStrategy;
-import org.springframework.social.connect.web.SessionStrategy;
+import org.springframework.beans.factory.annotation.Autowired; 
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,8 +34,8 @@ public class ValidateController {
 	private ValidateCodeGenerator smsValidateCodeGenerator;
 	@Autowired
 	private SmsCodeSender smsCodeSender;
-
-	private SessionStrategy sessionStrategy = new HttpSessionSessionStrategy();
+	@Autowired
+	private ValidateCodeRepository validateCodeRepository;
 	/**
 	 * 生成图片验证码
 	 * @param request
@@ -48,7 +46,7 @@ public class ValidateController {
 	public void createImageCode(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		ImageCode imageCode = (ImageCode)imageValidateCodeGenerator.createImageCode(request);
 		ValidateCode validateCode = new ValidateCode(imageCode.getCode(), imageCode.getExpireTime());
-		sessionStrategy.setAttribute(new ServletWebRequest(request), ProjectConstant.IMAGE_SESSION_KEY, validateCode);
+		validateCodeRepository.save(new ServletWebRequest(request), validateCode, ProjectConstant.IMAGE_SESSION_KEY);
 		ImageIO.write(imageCode.getBufferedImage(), "JPEG", response.getOutputStream());
 	}
 	
@@ -64,7 +62,7 @@ public class ValidateController {
 		ValidateCode smsValidateCode = smsValidateCodeGenerator.createImageCode(request);
 		String mobile = ServletRequestUtils.getRequiredStringParameter(request, "mobile");
 		smsCodeSender.send(mobile,smsValidateCode.getCode());
-		sessionStrategy.setAttribute(new ServletWebRequest(request), ProjectConstant.SMS_SESSION_KEY, smsValidateCode);
+		validateCodeRepository.save(new ServletWebRequest(request), smsValidateCode, ProjectConstant.SMS_SESSION_KEY);
 	}
 
  

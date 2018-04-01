@@ -7,6 +7,7 @@
 		<groupId>cn.yichao.security.pater</groupId>
 		<artifactId>yichao-pater</artifactId>
 		<version>0.5-SNAPSHOT</version>
+		<relativePath>../yichao-pater</relativePath>
 	</parent>
 	<dependencies>
 		<dependency>

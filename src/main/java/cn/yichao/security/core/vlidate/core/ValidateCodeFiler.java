@@ -25,7 +25,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import cn.yichao.security.core.constant.ProjectConstant;
 import cn.yichao.security.core.properties.SecurityPeoperties;
 import cn.yichao.security.core.vlidate.ImageCode;
-import cn.yichao.security.core.vlidate.ValidateController;
+import cn.yichao.security.core.vlidate.ValidateCodeRepository;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +40,9 @@ public class ValidateCodeFiler extends OncePerRequestFilter implements Initializ
 	private AuthenticationFailureHandler yichaoAuthenticationFailuHandler;
 	//存放所有验证码路径
 	private Set<String> urls = new HashSet<>();
+	
+	@Autowired
+	private ValidateCodeRepository validateCodeRepository;
 	
 	private SecurityPeoperties securityPeoperties;
 	//路径匹配器
@@ -84,8 +87,8 @@ public class ValidateCodeFiler extends OncePerRequestFilter implements Initializ
 	}
 
 	private void validata(ServletWebRequest request) throws ServletRequestBindingException {
-		  ImageCode code = (ImageCode)sessionStrategy.
-	                getAttribute(request, ProjectConstant.IMAGE_SESSION_KEY);
+		  ImageCode code = (ImageCode)validateCodeRepository.
+	                get(request, ProjectConstant.IMAGE_SESSION_KEY);
 	        String imageCode = ServletRequestUtils.getStringParameter(request.getRequest(), ProjectConstant.IMAGE_CODE);
 	        if(StringUtils.isBlank(imageCode)){
 	            throw  new ValidataCodeException("验证码不能为空");
