@@ -72,5 +72,6 @@
 			<artifactId>ant</artifactId>
 			<version>1.8.2</version>
 		</dependency>
+
 	</dependencies>
 </project>

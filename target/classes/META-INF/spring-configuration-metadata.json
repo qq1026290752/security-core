@@ -20,6 +20,11 @@
     },
     {
       "sourceType": "cn.yichao.security.core.properties.SecurityPeoperties",
+      "name": "yichao.security.oauth2",
+      "type": "cn.yichao.security.core.properties.OAuth2Properties"
+    },
+    {
+      "sourceType": "cn.yichao.security.core.properties.SecurityPeoperties",
       "name": "yichao.security.session",
       "type": "cn.yichao.security.core.properties.SessionProperties"
     },

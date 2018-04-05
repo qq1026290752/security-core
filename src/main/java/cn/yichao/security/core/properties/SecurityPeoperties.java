@@ -17,4 +17,6 @@ public class SecurityPeoperties {
 	private SocialProperties social = new SocialProperties();
 	
 	private SessionProperties session = new SessionProperties();
+	
+	private OAuth2Properties oauth2 = new OAuth2Properties();
 }
