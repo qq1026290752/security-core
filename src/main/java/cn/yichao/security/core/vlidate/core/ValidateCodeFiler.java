@@ -13,7 +13,6 @@ import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.util.AntPathMatcher;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.social.connect.web.HttpSessionSessionStrategy;
 import org.springframework.social.connect.web.SessionStrategy;
@@ -24,7 +23,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import cn.yichao.security.core.constant.ProjectConstant;
 import cn.yichao.security.core.properties.SecurityPeoperties;
-import cn.yichao.security.core.vlidate.ImageCode;
+import cn.yichao.security.core.vlidate.ValidateCode;
 import cn.yichao.security.core.vlidate.ValidateCodeRepository;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -41,13 +40,15 @@ public class ValidateCodeFiler extends OncePerRequestFilter implements Initializ
 	//存放所有验证码路径
 	private Set<String> urls = new HashSet<>();
 	
-	@Autowired
-	private ValidateCodeRepository validateCodeRepository;
+	private ValidateCodeRepository sessionCodeRepository;
 	
 	private SecurityPeoperties securityPeoperties;
 	//路径匹配器
 	private AntPathMatcher antPathMatcher = new AntPathMatcher(); 
 	
+	public ValidateCodeFiler(ValidateCodeRepository sessionCodeRepository) {
+		this.sessionCodeRepository = sessionCodeRepository;
+	}
 	
 	@Override
 	public void afterPropertiesSet() throws ServletException {
@@ -87,7 +88,7 @@ public class ValidateCodeFiler extends OncePerRequestFilter implements Initializ
 	}
 
 	private void validata(ServletWebRequest request) throws ServletRequestBindingException {
-		  ImageCode code = (ImageCode)validateCodeRepository.
+		ValidateCode code =  sessionCodeRepository.
 	                get(request, ProjectConstant.IMAGE_SESSION_KEY);
 	        String imageCode = ServletRequestUtils.getStringParameter(request.getRequest(), ProjectConstant.IMAGE_CODE);
 	        if(StringUtils.isBlank(imageCode)){
