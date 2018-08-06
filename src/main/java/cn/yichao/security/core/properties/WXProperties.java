@@ -1,8 +1,6 @@
 package cn.yichao.security.core.properties;
 
-import org.springframework.boot.autoconfigure.social.SocialProperties;
-
-public class WXProperties extends SocialProperties {
+public class WXProperties extends SocialPropertie {
 
 	private String providerId = "wx";
 

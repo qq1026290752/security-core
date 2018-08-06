@@ -1,8 +1,7 @@
 package cn.yichao.security.core.properties;
 
-import org.springframework.boot.autoconfigure.social.SocialProperties;
 
-public class QQProperties extends SocialProperties {
+public class QQProperties extends SocialPropertie {
 
 	private String providerId = "qq";
 

@@ -19,7 +19,7 @@ public class YichaoAuthorizeConfigProvider implements AuthorizeConfigProvider {
 	public void config(
 			ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry authorizeRequests) {
 		 authorizeRequests.antMatchers(
-				 ProjectConstant.LOGIN_JUMP_CONTROLLER
+				 	ProjectConstant.LOGIN_JUMP_CONTROLLER
 		 			,securityPeoperties.getBrowser().getLoginPage()
 		 			,ProjectConstant.VALIDATE_URI_PREFIX + "*"
 		 			,securityPeoperties.getBrowser().getSignUpUrl()
